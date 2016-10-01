@@ -47,12 +47,18 @@ class ViewController: UIViewController {
     //       Modify this one or create your own.
     func updateSomeDataStructure(_ content: String) {
         print("Update me like one of those PCs")
+        
     }
     
     // TODO: Ensure that resultLabel gets updated.
     //       Modify this one or create your own.
     func updateResultLabel(_ content: String) {
         print("Update me like one of those PCs")
+        if([Character](content.characters).count <= 7) {
+            resultLabel.text = content
+        }
+        
+        
     }
     
     
@@ -80,17 +86,88 @@ class ViewController: UIViewController {
     func numberPressed(_ sender: CustomButton) {
         guard Int(sender.content) != nil else { return }
         print("The number \(sender.content) was pressed")
-        // Fill me in!
+        print(resultLabel.text)
+        if(resultLabel.text! == "0") {
+            updateResultLabel(sender.content)
+        } else if (resultLabel.text! == "-0") {
+            updateResultLabel("-" + sender.content)
+        } else {
+            updateResultLabel((resultLabel.text)! + sender.content)
+        }
+
+        
+        
     }
     
     // REQUIRED: The responder to an operator button being pressed.
     func operatorPressed(_ sender: CustomButton) {
         // Fill me in!
+//        print(sender.content)
+        
+        switch sender.content {
+        case "C":
+            updateResultLabel("0")
+            break
+        case "+/-":
+            if(resultLabel.text![resultLabel.text!.startIndex] == "-") {
+                resultLabel.text!.remove(at: resultLabel.text!.startIndex);
+            } else {
+                updateResultLabel("-" + resultLabel.text!)
+            }
+            break
+        case "%":
+            var chars = [Character](resultLabel.text!.characters)
+//            var indexOfDot = chars.count-1
+            if let indexOfDot = chars.index(of: ".") {
+                chars.remove(at: indexOfDot)
+                if (indexOfDot >= 2) {
+                    chars.insert(".", at: indexOfDot-2)
+                } else if (indexOfDot == 1) {
+                    chars.insert("0", at: 0)
+                    chars.insert(".", at: 0)
+                } else if (indexOfDot == 0) {
+                    chars.insert("0", at: 0)
+                    chars.insert("0", at: 0)
+                    chars.insert(".", at: 0)
+                }
+
+            } else {
+                print(chars.count)
+                if (chars.count >= 2) {
+                    chars.insert(".", at: 0)
+                } else if (chars.count == 1) {
+                    chars.insert("0", at: 0)
+                    chars.insert(".", at: 0)
+                }
+
+            }
+            updateResultLabel(String(chars))
+            break
+        default:
+            print(sender.content)
+            print("ERROR")
+        }
     }
     
     // REQUIRED: The responder to a number or operator button being pressed.
     func buttonPressed(_ sender: CustomButton) {
-       // Fill me in!
+        switch sender.content {
+        case "0":
+            if(resultLabel.text! == "0") {
+                updateResultLabel(sender.content)
+            } else {
+                updateResultLabel((resultLabel.text)! + "0")
+            }
+            break
+        case ".":
+            let chars = [Character](resultLabel.text!.characters)
+            if (chars.index(of: ".") == nil) {
+                updateResultLabel(resultLabel.text!+".")
+            }
+            break
+        default:
+            print("ERROR")
+        }
     }
     
     // IMPORTANT: Do NOT change any of the code below.
