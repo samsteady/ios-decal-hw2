@@ -21,8 +21,9 @@ class ViewController: UIViewController {
     
     // TODO: This looks like a good place to add some data structures.
     //       One data structure is initialized below for reference.
-    var someDataStructure: [String] = [""]
-    
+    var toEval: String = ""
+    var resultValue = ""
+    var wasOperator = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,9 +46,8 @@ class ViewController: UIViewController {
     
     // TODO: A method to update your data structure(s) would be nice.
     //       Modify this one or create your own.
-    func updateSomeDataStructure(_ content: String) {
-        print("Update me like one of those PCs")
-        
+    func updateToEvalString(_ content: String) {
+      toEval = content
     }
     
     // TODO: Ensure that resultLabel gets updated.
@@ -57,8 +57,6 @@ class ViewController: UIViewController {
         if([Character](content.characters).count <= 7) {
             resultLabel.text = content
         }
-        
-        
     }
     
     
@@ -94,16 +92,11 @@ class ViewController: UIViewController {
         } else {
             updateResultLabel((resultLabel.text)! + sender.content)
         }
-
-        
-        
     }
     
     // REQUIRED: The responder to an operator button being pressed.
     func operatorPressed(_ sender: CustomButton) {
         // Fill me in!
-//        print(sender.content)
-        
         switch sender.content {
         case "C":
             updateResultLabel("0")
@@ -117,10 +110,18 @@ class ViewController: UIViewController {
             break
         case "%":
             var chars = [Character](resultLabel.text!.characters)
-//            var indexOfDot = chars.count-1
             if let indexOfDot = chars.index(of: ".") {
                 chars.remove(at: indexOfDot)
-                if (indexOfDot >= 2) {
+                var allZero = true
+                for c in chars {
+                    if (c != "0") {
+                        allZero = false
+                    }
+                }
+                if (allZero) {
+                    updateResultLabel("0")
+                    break
+                } else if (indexOfDot >= 2) {
                     chars.insert(".", at: indexOfDot-2)
                 } else if (indexOfDot == 1) {
                     chars.insert("0", at: 0)
@@ -132,19 +133,31 @@ class ViewController: UIViewController {
                 }
 
             } else {
-                print(chars.count)
-                if (chars.count >= 2) {
-                    chars.insert(".", at: 0)
+                var allZero = true
+                for c in chars {
+                    if (c != "0") {
+                        allZero = false
+                    }
+                }
+                if (allZero) {
+                    updateResultLabel("0")
+                    break
+                } else if (chars.count >= 2) {
+                    chars.insert(".", at: chars.count-2)
                 } else if (chars.count == 1) {
                     chars.insert("0", at: 0)
                     chars.insert(".", at: 0)
                 }
-
             }
             updateResultLabel(String(chars))
             break
+            case "/":
+                updateToEvalString("/"+resultLabel.text!)
+                wasOperator = true
+                resultLabel.text! = "0"
+                break
+            
         default:
-            print(sender.content)
             print("ERROR")
         }
     }

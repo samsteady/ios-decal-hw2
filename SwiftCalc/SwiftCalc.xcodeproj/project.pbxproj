@@ -254,13 +254,13 @@
 					};
 					242B970B1D925BDD00C640FA = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = ZYEV58R54Z;
+						DevelopmentTeam = V355836XS2;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 242B96F71D925BDC00C640FA;
 					};
 					24D85AFB1D95095800AE8CD8 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = ZYEV58R54Z;
+						DevelopmentTeam = V355836XS2;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 242B96F71D925BDC00C640FA;
 					};
@@ -498,7 +498,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = ZYEV58R54Z;
+				DEVELOPMENT_TEAM = V355836XS2;
 				INFOPLIST_FILE = SwiftCalcTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = z.SwiftCalcTests;
@@ -513,7 +513,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = ZYEV58R54Z;
+				DEVELOPMENT_TEAM = V355836XS2;
 				INFOPLIST_FILE = SwiftCalcTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = z.SwiftCalcTests;
@@ -526,7 +526,7 @@
 		24D85B031D95095800AE8CD8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEVELOPMENT_TEAM = ZYEV58R54Z;
+				DEVELOPMENT_TEAM = V355836XS2;
 				INFOPLIST_FILE = SwiftCalcUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = z.SwiftCalcUITests;
@@ -539,7 +539,7 @@
 		24D85B041D95095800AE8CD8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEVELOPMENT_TEAM = ZYEV58R54Z;
+				DEVELOPMENT_TEAM = V355836XS2;
 				INFOPLIST_FILE = SwiftCalcUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = z.SwiftCalcUITests;
