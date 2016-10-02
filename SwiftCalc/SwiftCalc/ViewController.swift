@@ -21,9 +21,9 @@ class ViewController: UIViewController {
     
     // TODO: This looks like a good place to add some data structures.
     //       One data structure is initialized below for reference.
-    var toEval: String = ""
-    var resultValue = ""
-    var wasOperator = false
+    var toEval = ""
+    var evalOp = ""
+    var resultValue = "0"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,9 +53,14 @@ class ViewController: UIViewController {
     // TODO: Ensure that resultLabel gets updated.
     //       Modify this one or create your own.
     func updateResultLabel(_ content: String) {
-        print("Update me like one of those PCs")
-        if([Character](content.characters).count <= 7) {
-            resultLabel.text = content
+        if ([Character](content.characters).count <= 7) {
+            resultValue = content
+            resultLabel.text! = content
+            
+        } else {
+            let first = content.substring(to: content.index(content.startIndex, offsetBy: 7))
+            resultValue = first
+            resultLabel.text! = first
         }
     }
     
@@ -85,12 +90,12 @@ class ViewController: UIViewController {
         guard Int(sender.content) != nil else { return }
         print("The number \(sender.content) was pressed")
         print(resultLabel.text)
-        if(resultLabel.text! == "0") {
+        if(resultValue == "0") {
             updateResultLabel(sender.content)
-        } else if (resultLabel.text! == "-0") {
+        } else if (resultValue == "-0") {
             updateResultLabel("-" + sender.content)
         } else {
-            updateResultLabel((resultLabel.text)! + sender.content)
+            updateResultLabel(resultValue + sender.content)
         }
     }
     
@@ -102,14 +107,14 @@ class ViewController: UIViewController {
             updateResultLabel("0")
             break
         case "+/-":
-            if(resultLabel.text![resultLabel.text!.startIndex] == "-") {
-                resultLabel.text!.remove(at: resultLabel.text!.startIndex);
+            if(resultValue[resultValue.startIndex] == "-") {
+                resultValue.remove(at: resultValue.startIndex);
             } else {
-                updateResultLabel("-" + resultLabel.text!)
+                updateResultLabel("-" + resultValue)
             }
             break
         case "%":
-            var chars = [Character](resultLabel.text!.characters)
+            var chars = [Character](resultValue.characters)
             if let indexOfDot = chars.index(of: ".") {
                 chars.remove(at: indexOfDot)
                 var allZero = true
@@ -152,10 +157,71 @@ class ViewController: UIViewController {
             updateResultLabel(String(chars))
             break
             case "/":
-                updateToEvalString("/"+resultLabel.text!)
-                wasOperator = true
-                resultLabel.text! = "0"
+                evalOp = "/"
+                toEval = resultValue
+                resultValue = "0"
                 break
+            case "*":
+                evalOp = "*"
+                resultValue = "0"
+                break
+            case "-":
+                evalOp = "-"
+                resultValue = "0"
+                break
+            case "+":
+                evalOp = "+"
+                resultValue = "0"
+                break
+            case "=":
+                evaluate(resultValue, evalOp, toEval)
+                toEval = ""
+                evalOp = ""
+                break
+        default:
+            print("ERROR")
+        }
+    }
+    
+    func evaluate(_ s2: String, _ op: String, _ s1: String) {
+        switch op {
+        case "/":
+            var s2Num = Double(s2)!
+            var s1Num = Double(s1)!
+            
+            if (s2Num == 0) {
+                print("ERROR - Cannot divide by 0")
+                break
+            } else if (s1Num < s2Num) {
+                var chars1 = [Character](s1.characters)
+                var chars2 = [Character](s2.characters)
+                if !chars1.contains(".") {
+                    chars1.insert(".", at: chars1.count)
+                    chars1.insert("0", at: chars1.count)
+                }
+                if !chars2.contains(".") {
+                    chars2.insert(".", at: chars2.count)
+                    chars2.insert("0", at: chars2.count)
+                }
+                let s1D = String(chars1)
+                let s2D = String(chars2)
+                print(s1D)
+                print(s2D)
+                s2Num = Double(s2D)!
+                s1Num = Double(s1D)!
+                let val = s1Num / s2Num
+                print(val)
+                let strVal = String(val)
+                updateResultLabel(strVal)
+            } else if (s1Num.truncatingRemainder(dividingBy: s2Num) == 0) {
+                let val = s1Num / s2Num
+                var strVal = String(val)
+                var chars = [Character](strVal.characters)
+                chars.remove(at: chars.count-1)
+                chars.remove(at: chars.count-1)
+                strVal = String(chars)
+                updateResultLabel(strVal)
+            }
             
         default:
             print("ERROR")
