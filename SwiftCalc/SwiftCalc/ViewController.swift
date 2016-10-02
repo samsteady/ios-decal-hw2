@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     var toEval = ""
     var evalOp = ""
     var resultValue = "0"
+    var wasOp = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,7 +90,7 @@ class ViewController: UIViewController {
     func numberPressed(_ sender: CustomButton) {
         guard Int(sender.content) != nil else { return }
         print("The number \(sender.content) was pressed")
-        print(resultLabel.text)
+        wasOp = false
         if(resultValue == "0") {
             updateResultLabel(sender.content)
         } else if (resultValue == "-0") {
@@ -105,6 +106,8 @@ class ViewController: UIViewController {
         switch sender.content {
         case "C":
             updateResultLabel("0")
+            toEval = ""
+            evalOp = ""
             break
         case "+/-":
             if(resultValue[resultValue.startIndex] == "-") {
@@ -157,26 +160,74 @@ class ViewController: UIViewController {
             updateResultLabel(String(chars))
             break
             case "/":
-                evalOp = "/"
-                toEval = resultValue
-                resultValue = "0"
+                if (wasOp) {
+                    evalOp = "/"
+                } else {
+                    wasOp = true
+                    if (evalOp != "" && toEval != "") {
+                        evaluate(resultValue, evalOp, toEval)
+                    }
+                    evalOp = "/"
+                    if (resultValue != "0") {
+                        toEval = resultValue
+                    }
+                    resultValue = "0"
+                }
                 break
             case "*":
-                evalOp = "*"
-                resultValue = "0"
+                if (wasOp) {
+                    evalOp = "*"
+                } else {
+                    wasOp = true
+                    if (evalOp != "" && toEval != "") {
+                        evaluate(resultValue, evalOp, toEval)
+                    }
+                    evalOp = "*"
+                    if (resultValue != "0") {
+                        toEval = resultValue
+                    }
+                    resultValue = "0"
+                }
                 break
             case "-":
-                evalOp = "-"
-                resultValue = "0"
+                if (wasOp) {
+                    evalOp = "-"
+                } else {
+                    wasOp = true
+                    if (evalOp != "" && toEval != "") {
+                        evaluate(resultValue, evalOp, toEval)
+                    }
+                    evalOp = "-"
+                    if (resultValue != "0") {
+                        toEval = resultValue
+                    }
+                    resultValue = "0"
+                }
                 break
             case "+":
-                evalOp = "+"
-                resultValue = "0"
+                if (wasOp) {
+                    evalOp = "+"
+                } else {
+                    wasOp = true
+                    if (evalOp != "" && toEval != "") {
+                        evaluate(resultValue, evalOp, toEval)
+                    }
+                    evalOp = "+"
+                    if (resultValue != "0") {
+                        toEval = resultValue
+                    }
+                    resultValue = "0"
+                }
                 break
             case "=":
-                evaluate(resultValue, evalOp, toEval)
-                toEval = ""
-                evalOp = ""
+                if (wasOp) {
+                    break
+                }
+                if (evalOp != "" && toEval != "") {
+                    evaluate(resultValue, evalOp, toEval)
+                    toEval = resultValue
+                    evalOp = ""
+                }
                 break
         default:
             print("ERROR")
@@ -184,11 +235,10 @@ class ViewController: UIViewController {
     }
     
     func evaluate(_ s2: String, _ op: String, _ s1: String) {
+        var s2Num = Double(s2)!
+        var s1Num = Double(s1)!
         switch op {
         case "/":
-            var s2Num = Double(s2)!
-            var s1Num = Double(s1)!
-            
             if (s2Num == 0) {
                 print("ERROR - Cannot divide by 0")
                 break
@@ -221,8 +271,52 @@ class ViewController: UIViewController {
                 chars.remove(at: chars.count-1)
                 strVal = String(chars)
                 updateResultLabel(strVal)
+            } else {
+                let val = s1Num / s2Num
+                let strVal = String(val)
+                updateResultLabel(strVal)
             }
-            
+            break
+        case "*":
+            let product = s1Num*s2Num
+            if (product.truncatingRemainder(dividingBy: 1) == 0) {
+                var strVal = String(product)
+                var chars = [Character](strVal.characters)
+                chars.remove(at: chars.count-1)
+                chars.remove(at: chars.count-1)
+                strVal = String(chars)
+                updateResultLabel(strVal)
+
+            } else {
+                updateResultLabel(String(product))
+            }
+            break
+        case "-":
+            let sub = s1Num-s2Num
+            if (sub.truncatingRemainder(dividingBy: 1) == 0) {
+                var strVal = String(sub)
+                var chars = [Character](strVal.characters)
+                chars.remove(at: chars.count-1)
+                chars.remove(at: chars.count-1)
+                strVal = String(chars)
+                updateResultLabel(strVal)
+                
+            } else {
+                updateResultLabel(String(sub))
+            }
+        case "+":
+            let sum = s1Num+s2Num
+            if (sum.truncatingRemainder(dividingBy: 1) == 0) {
+                var strVal = String(sum)
+                var chars = [Character](strVal.characters)
+                chars.remove(at: chars.count-1)
+                chars.remove(at: chars.count-1)
+                strVal = String(chars)
+                updateResultLabel(strVal)
+                
+            } else {
+                updateResultLabel(String(sum))
+            }
         default:
             print("ERROR")
         }
@@ -232,16 +326,16 @@ class ViewController: UIViewController {
     func buttonPressed(_ sender: CustomButton) {
         switch sender.content {
         case "0":
-            if(resultLabel.text! == "0") {
+            if(resultValue == "0") {
                 updateResultLabel(sender.content)
             } else {
-                updateResultLabel((resultLabel.text)! + "0")
+                updateResultLabel(resultValue + "0")
             }
             break
         case ".":
-            let chars = [Character](resultLabel.text!.characters)
+            let chars = [Character](resultValue.characters)
             if (chars.index(of: ".") == nil) {
-                updateResultLabel(resultLabel.text!+".")
+                updateResultLabel(resultValue+".")
             }
             break
         default:
