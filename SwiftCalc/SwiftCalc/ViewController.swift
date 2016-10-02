@@ -164,13 +164,13 @@ class ViewController: UIViewController {
                     evalOp = "/"
                 } else {
                     wasOp = true
+                    print(evalOp)
+                    print(toEval)
                     if (evalOp != "" && toEval != "") {
                         evaluate(resultValue, evalOp, toEval)
                     }
                     evalOp = "/"
-                    if (resultValue != "0") {
-                        toEval = resultValue
-                    }
+                    toEval = resultValue
                     resultValue = "0"
                 }
                 break
@@ -183,9 +183,7 @@ class ViewController: UIViewController {
                         evaluate(resultValue, evalOp, toEval)
                     }
                     evalOp = "*"
-                    if (resultValue != "0") {
-                        toEval = resultValue
-                    }
+                    toEval = resultValue
                     resultValue = "0"
                 }
                 break
@@ -198,9 +196,7 @@ class ViewController: UIViewController {
                         evaluate(resultValue, evalOp, toEval)
                     }
                     evalOp = "-"
-                    if (resultValue != "0") {
-                        toEval = resultValue
-                    }
+                    toEval = resultValue
                     resultValue = "0"
                 }
                 break
@@ -213,9 +209,7 @@ class ViewController: UIViewController {
                         evaluate(resultValue, evalOp, toEval)
                     }
                     evalOp = "+"
-                    if (resultValue != "0") {
-                        toEval = resultValue
-                    }
+                    toEval = resultValue
                     resultValue = "0"
                 }
                 break
@@ -241,7 +235,6 @@ class ViewController: UIViewController {
         case "/":
             if (s2Num == 0) {
                 print("ERROR - Cannot divide by 0")
-                break
             } else if (s1Num < s2Num) {
                 var chars1 = [Character](s1.characters)
                 var chars2 = [Character](s2.characters)
@@ -324,6 +317,7 @@ class ViewController: UIViewController {
     
     // REQUIRED: The responder to a number or operator button being pressed.
     func buttonPressed(_ sender: CustomButton) {
+        wasOp = false
         switch sender.content {
         case "0":
             if(resultValue == "0") {
